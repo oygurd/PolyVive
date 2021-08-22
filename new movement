@@ -1,0 +1,76 @@
+using UnityEngine;
+
+public class newThirdPerson : MonoBehaviour
+{
+    [Header("movement")]
+    public float movementSpeed = 50f;
+    public float movementMultiplier = 30f;
+    float horizontalMovement;
+    float verticalMovement;
+    Vector3 moveDirection;
+    Rigidbody RandyRb;
+    float rbDrag = 15f;
+
+    [Header("Rotate for gameplay")]
+    bool rotateA;
+    bool rotateD;
+
+    private void Start()
+    {
+        RandyRb = GetComponent<Rigidbody>();
+
+        RandyRb.freezeRotation = true;
+
+
+        rotateA = false;
+        rotateD = false;
+
+
+
+    }
+
+    private void Update()
+    {
+        Movement();
+        ControlDrag();
+    }
+
+    void Movement()//movement
+    {
+        horizontalMovement = Input.GetAxisRaw("Horizontal");
+        verticalMovement = Input.GetAxisRaw("Vertical");
+
+        moveDirection = transform.forward * verticalMovement + transform.right * horizontalMovement;
+    }
+
+    void ControlDrag()//movement
+    {
+        RandyRb.drag = rbDrag;
+    }
+
+
+    private void FixedUpdate()
+    {
+        Moveplayer();
+    }
+
+    void Moveplayer()//movement
+    {
+        RandyRb.AddForce(moveDirection.normalized * movementSpeed * movementMultiplier, ForceMode.Acceleration); //adds force to move the player towards desired direction
+    }
+
+    void RotateToKey()
+    {
+        if (rotateA == false)
+        {
+            if (Input.GetKey(KeyCode.A))
+            {
+                transform.Rotate(0, 15f, 0);
+                rotateA = true;
+            }
+        }
+    }
+
+
+
+}
